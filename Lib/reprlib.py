@@ -26,7 +26,7 @@ def recursive_repr(fillvalue='...'):
         # Can't use functools.wraps() here because of bootstrap issues
         wrapper.__module__ = getattr(user_function, '__module__')
         wrapper.__doc__ = getattr(user_function, '__doc__')
-        wrapper.__name__ = getattr(user_function, '__name__')
+        wrapper.__qualname__ = getattr(user_function, '__qualname__')
         wrapper.__qualname__ = getattr(user_function, '__qualname__')
         wrapper.__annotations__ = getattr(user_function, '__annotations__', {})
         return wrapper
@@ -52,7 +52,7 @@ class Repr:
         return self.repr1(x, self.maxlevel)
 
     def repr1(self, x, level):
-        typename = type(x).__name__
+        typename = type(x).__qualname__
         if ' ' in typename:
             parts = typename.split()
             typename = '_'.join(parts)
@@ -140,7 +140,7 @@ class Repr:
             # Bugs in x.__repr__() can cause arbitrary
             # exceptions -- then make up something
         except Exception:
-            return '<%s instance at %#x>' % (x.__class__.__name__, id(x))
+            return '<%s instance at %#x>' % (x.__class__.__qualname__, id(x))
         if len(s) > self.maxother:
             i = max(0, (self.maxother-3)//2)
             j = max(0, self.maxother-3-i)
